@@ -68,12 +68,16 @@ Before running the app, make sure you have:
 mvn clean package
 ```
 
-## Run
-
-Use Maven Exec Plugin directly:
+Copy the created JAR from `target/` into the docker project `KafkaStreams` folder, then build the Docker image:
 
 ```bash
-mvn exec:java -Dexec.mainClass=org.example.KafkaStreamsProcessors
+docker build -t kafkastreams .
+```
+
+Run the application container:
+
+```bash
+docker run -it --rm --name KafkaStreamsProcessors --network kafka-docker_kafka_network kafkastreams java -cp app.jar org.example.KafkaStreamsProcessors
 ```
 
 You should see logs similar to:
@@ -155,6 +159,3 @@ Expected Celsius value:
 ## Suggested next improvements
 
 - Make bootstrap servers, topic names, and registry URL configurable via environment variables
-- Add automated tests with `TopologyTestDriver`
-- Add dead-letter topic handling for malformed records
-- Add metrics and structured logging for observability
